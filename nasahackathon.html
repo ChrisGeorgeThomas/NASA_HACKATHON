@@ -21,17 +21,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 1rem;
         }
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-        }
-        .scroll-container {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        .scroll-container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, and Opera */
-        }
         .btn-primary {
             background-color: #3b82f6;
             transition: background-color 0.3s, transform 0.2s;
@@ -40,394 +29,195 @@
             background-color: #2563eb;
             transform: translateY(-2px);
         }
-        .btn-secondary {
-            background-color: #4f46e5;
-             transition: background-color 0.3s, transform 0.2s;
+        input[type="number"].supply-input {
+            background-color: rgba(10, 15, 31, 0.8);
+            border: 1px solid #3b82f6;
+            color: #e0e0e0;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            font-weight: bold;
+            text-align: center;
         }
-        .btn-secondary:hover {
-            background-color: #4338ca;
-            transform: translateY(-2px);
+        /* NEW: Loading Spinner Style */
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Header -->
     <header class="sticky top-0 z-30 glass-card mx-4 mt-4">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-white">
-                <span class="text-blue-400">Lunar</span> Sustainability Planner
-            </h1>
+            <h1 class="text-2xl font-bold text-white"><span class="text-blue-400">Lunar</span> Sustainability Planner</h1>
             <nav class="hidden md:flex space-x-6 text-lg">
-                <a href="#mission-params" class="hover:text-blue-400 transition-colors">Parameters</a>
-                <a href="#supplies" class="hover:text-blue-400 transition-colors">Supplies</a>
-                <a href="#waste" class="hover:text-blue-400 transition-colors">Waste</a>
-                <a href="#recycling" class="hover:text-blue-400 transition-colors">Recycling</a>
-                <a href="#process" class="hover:text-blue-400 transition-colors">Processes</a>
+                <a href="#mission-params" class="hover:text-blue-400">Parameters</a>
+                <a href="#supplies" class="hover:text-blue-400">Supplies</a>
+                <a href="#impact-dashboard" class="hover:text-blue-400">Dashboard</a>
             </nav>
         </div>
     </header>
 
     <main class="container mx-auto p-4 md:p-6">
         
-        <!-- Mission Parameters Section -->
         <section id="mission-params" class="py-12">
-            <div class="glass-card p-8 text-center">
-                <h2 class="text-4xl font-bold mb-2 text-white">Mission Parameters</h2>
-                <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">Set the core variables for your lunar mission. All calculations on this page will update based on these inputs.</p>
-                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+             <div class="glass-card p-8 text-center mb-8">
+                <h2 class="text-3xl font-bold mb-4 text-white">Mission & Financial Parameters</h2>
+                <div class="grid lg:grid-cols-2 gap-8">
                     <div class="space-y-4">
-                        <label for="astronauts" class="text-xl font-semibold block">Number of Astronauts</label>
+                        <label for="missionDuration" class="text-xl font-semibold block">Mission Duration (Days)</label>
                         <div class="flex items-center justify-center space-x-4">
-                            <input type="range" id="astronauts" min="1" max="10" value="4" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
-                            <span id="astronauts-value" class="text-2xl font-bold text-blue-400 w-12 text-center">4</span>
-                        </div>
+                           <input type="range" id="missionDuration" min="30" max="1000" value="365" step="5" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                           <span id="duration-value" class="text-2xl font-bold text-blue-400 w-20 text-center">365</span>
+                       </div>
                     </div>
                     <div class="space-y-4">
-                        <label for="duration" class="text-xl font-semibold block">Mission Duration (Days)</label>
-                         <div class="flex items-center justify-center space-x-4">
-                            <input type="range" id="duration" min="30" max="1000" value="365" step="5" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
-                            <span id="duration-value" class="text-2xl font-bold text-blue-400 w-20 text-center">365</span>
-                        </div>
+                        <label for="totalInvestment" class="text-xl font-semibold block">Total Investment ($M)</label>
+                        <input type="range" id="totalInvestment" min="10" max="500" value="65" step="5" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        <span id="investment-value" class="text-2xl font-bold text-blue-400">$65M</span>
                     </div>
                 </div>
-                <button id="calculate-btn" class="mt-10 px-8 py-3 btn-primary text-white font-bold rounded-lg text-xl shadow-lg">
-                    Plan Mission
+            </div>
+
+            <section id="supplies" class="py-12">
+                <h2 class="text-4xl font-bold text-center mb-8">Initial Mission Supplies (kg)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🧤</div><h3 class="text-lg mt-2">Nitrile Gloves</h3><div class="mt-2"><input type="number" id="supply-gloves" value="14.6" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">👕</div><h3 class="text-lg mt-2">Cotton Clothing</h3><div class="mt-2"><input type="number" id="supply-clothing" value="36.5" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🛍️</div><h3 class="text-lg mt-2">Reclosable Bags</h3><div class="mt-2"><input type="number" id="supply-reclosable_bag" value="14.6" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🧃</div><h3 class="text-lg mt-2">Drink Pouches</h3><div class="mt-2"><input type="number" id="supply-drink_pouch" value="43.8" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🍲</div><h3 class="text-lg mt-2">Rehydratable Pouches</h3><div class="mt-2"><input type="number" id="supply-rehydratable_pouch" value="58.4" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🔥</div><h3 class="text-lg mt-2">Nomex Gear</h3><div class="mt-2"><input type="number" id="supply-nomex_bag" value="7.3" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🧱</div><h3 class="text-lg mt-2">Zotek F30 Foam</h3><div class="mt-2"><input type="number" id="supply-zotek_foam" value="2.9" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🔩</div><h3 class="text-lg mt-2">Aluminum Parts</h3><div class="mt-2"><input type="number" id="supply-aluminum_struts" value="1.5" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                </div>
+            </section>
+             <div class="text-center mt-10">
+                <button id="calculate-btn" class="px-8 py-3 btn-primary text-white font-bold rounded-lg text-xl shadow-lg flex items-center justify-center mx-auto">
+                    <span>Analyze Mission with Gemini</span>
                 </button>
             </div>
         </section>
 
-        <!-- Initial Supplies Section -->
-        <section id="supplies" class="py-12">
-            <h2 class="text-4xl font-bold text-center mb-8">Initial Mission Supplies</h2>
-            <div id="supplies-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
-                <!-- Material cards will be injected here by JavaScript -->
+        <section id="impact-dashboard" class="py-12 hidden">
+             <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div class="glass-card p-8 h-full">
+                    <h2 class="text-3xl font-bold text-center mb-4">Waste Generation</h2>
+                    <div class="text-center mb-8"><span class="text-xl">Total Waste:</span><span id="total-waste" class="text-3xl font-bold text-blue-400 ml-2"></span></div>
+                    <div class="w-full max-w-2xl mx-auto h-80"><canvas id="wasteChart"></canvas></div>
+                </div>
+                <div class="glass-card p-8 h-full">
+                    <h2 class="text-3xl font-bold text-center mb-4">Recycling Potential</h2>
+                     <div class="text-center mb-8"><span class="text-xl">Total Recyclable Mass:</span><span id="recyclable-mass" class="text-3xl font-bold text-green-400 ml-2"></span></div>
+                    <div class="w-full mx-auto h-80"><canvas id="recyclingChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div class="glass-card p-8 text-center bg-blue-900/50 border-blue-700">
+                    <h3 class="text-3xl font-semibold mb-4">Logistical Impact 🛰️</h3>
+                    <div id="launches-avoided" class="text-6xl font-bold text-green-400 my-4"></div>
+                    <p class="text-lg text-gray-300">resupply missions avoided.</p>
+                </div>
+                <div class="glass-card p-8 text-center bg-indigo-900/50 border-indigo-700">
+                    <h3 class="text-3xl font-semibold mb-4">Financial Impact 💰</h3>
+                    <div id="recycled-value" class="text-6xl font-bold text-green-400 my-4"></div>
+                    <p class="text-lg text-gray-300">Financial payback in <strong id="payback-period" class="text-white"></strong> years.</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-8">
+                <h2 class="text-3xl font-bold mb-4 text-center">Gemini's Analysis & Insights</h2>
+                <div id="gemini-analysis" class="prose prose-invert max-w-none text-lg leading-relaxed">
+                    </div>
             </div>
         </section>
         
-        <!-- Waste & Recycling Combined Section -->
-        <div class="grid lg:grid-cols-5 gap-8">
-            <!-- Waste Generation Section -->
-            <section id="waste" class="py-12 lg:col-span-3">
-                <div class="glass-card p-8 h-full">
-                    <h2 class="text-4xl font-bold text-center mb-2">Waste Generation</h2>
-                    <p class="text-lg text-center text-gray-300 mb-8">Estimated waste produced during the mission.</p>
-                    <div class="text-center mb-8">
-                        <span class="text-2xl">Total Waste Generated:</span>
-                        <span id="total-waste" class="text-4xl font-bold text-blue-400 ml-2">0 kg</span>
-                    </div>
-                    <div class="w-full max-w-2xl mx-auto h-96">
-                        <canvas id="wasteChart"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Recycling Potential Section -->
-            <section id="recycling" class="py-12 lg:col-span-2">
-                <div class="glass-card p-8 h-full flex flex-col justify-between">
-                    <div>
-                        <h2 class="text-4xl font-bold text-center mb-2">Recycling Potential</h2>
-                        <p class="text-lg text-center text-gray-300 mb-8">Analysis of recyclable mass and its impact.</p>
-                        <div class="text-center mb-8">
-                            <span class="text-2xl">Total Recyclable Mass:</span>
-                            <span id="recyclable-mass" class="text-4xl font-bold text-green-400 ml-2">0 kg</span>
-                        </div>
-                        <div class="w-full mx-auto h-64">
-                            <canvas id="recyclingChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="mt-8 text-center bg-blue-900/50 p-6 rounded-lg border border-blue-700">
-                        <h3 class="text-2xl font-semibold mb-2">Mission Extension</h3>
-                        <p class="text-lg text-gray-300">Recycling extends mission self-sufficiency by approximately:</p>
-                        <div id="mission-extension" class="text-6xl font-bold text-green-400 mt-2">0 Days</div>
-                    </div>
-                </div>
-            </section>
+        <div id="loading-indicator" class="hidden justify-center items-center py-12">
+            <div class="loader"></div>
+            <p class="text-2xl ml-4 text-gray-400">Contacting backend and analyzing with Gemini...</p>
         </div>
-
-        <!-- Recycling Processes Section -->
-        <section id="process" class="py-12">
-            <h2 class="text-4xl font-bold text-center mb-8">Recycling & Reprocessing Guides</h2>
-            <div id="process-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Process cards will be injected here by JavaScript -->
-            </div>
-        </section>
     </main>
 
-    <!-- Modal Structure -->
-    <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
-        <div id="modal-content" class="glass-card p-8 rounded-lg max-w-3xl w-full mx-4 max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center mb-6">
-                <h3 id="modal-title" class="text-3xl font-bold text-white"></h3>
-                <button id="modal-close" class="text-3xl text-gray-400 hover:text-white">&times;</button>
-            </div>
-            <div id="modal-body" class="overflow-y-auto scroll-container">
-                <!-- Modal content goes here -->
-            </div>
-        </div>
-    </div>
-
-    <footer class="text-center py-8 text-gray-500">
-        <p>A conceptual tool for the NASA LunaRecycle Challenge.</p>
-    </footer>
+    <footer class="text-center py-8 text-gray-500"><p>Conceptual Tool: Frontend Interface for Gemini-Powered Backend</p></footer>
 
 <script>
-// --- DATA ---
-const materialsData = [
-    {
-        id: 'gloves',
-        name: 'Nitrile Gloves',
-        icon: '🧤',
-        consumptionRate: 0.02, // kg per person per day (approx. 4 pairs)
-        elementalComposition: { 'Carbon': 65, 'Hydrogen': 9, 'Nitrogen': 24, 'Oxygen': 2 },
-        durability: 'Very Low (1-3 years). Unfiltered UV and cosmic radiation rapidly break down the polymer chains, causing the material to become extremely brittle and fragment.',
-        recyclablePercentage: 0.95,
-        recycledOutput: '3D Printer Filament',
-        recyclingProcessId: 'extrusion'
-    },
-    {
-        id: 'clothing',
-        name: 'Cotton Clothing',
-        icon: '👕',
-        consumptionRate: 0.05, // kg per person per day (change of shirt/socks)
-        elementalComposition: { 'Carbon': 44, 'Oxygen': 49, 'Hydrogen': 6, 'Other': 1 },
-        durability: 'Very Low (1-3 years). As a natural organic polymer (cellulose), cotton is quickly degraded by UV radiation, losing all tensile strength.',
-        recyclablePercentage: 0.90,
-        recycledOutput: 'Biochar & Water',
-        recyclingProcessId: 'pyrolysis'
-    },
-    {
-        id: 'reclosable_bag',
-        name: 'Reclosable Bags',
-        icon: '🛍️',
-        consumptionRate: 0.01, // kg per person per day
-        elementalComposition: { 'Carbon': 86, 'Hydrogen': 14 },
-        durability: 'Very Low (2-4 years). Standard polyethylene has no UV protection and becomes brittle, fragmenting into hazardous microplastics.',
-        recyclablePercentage: 0.95,
-        recycledOutput: '3D Printer Filament',
-        recyclingProcessId: 'extrusion'
-    },
-    {
-        id: 'drink_pouch',
-        name: 'Drink Pouches',
-        icon: '🧃',
-        consumptionRate: 0.03, // kg per person per day
-        elementalComposition: { 'Polyethylene': 65, 'Aluminum': 24, 'PET': 11 },
-        durability: 'Moderate (5-10 years). The outer plastic layers degrade first, causing delamination from the more durable inner aluminum foil.',
-        recyclablePercentage: 0.85,
-        recycledOutput: 'Aluminum & Hydrocarbons',
-        recyclingProcessId: 'pyrolysis'
-    },
-    {
-        id: 'rehydratable_pouch',
-        name: 'Rehydratable Pouches',
-        icon: '🍲',
-        consumptionRate: 0.04, // kg per person per day
-        elementalComposition: { 'Nylon': 41, 'Polyethylene': 33, 'EVOH': 11, 'Other': 15 },
-        durability: 'Moderate (5-10 years). Similar to drink pouches, the multi-layer structure fails as outer polymers become brittle from radiation.',
-        recyclablePercentage: 0.80,
-        recycledOutput: 'Mixed Hydrocarbons',
-        recyclingProcessId: 'pyrolysis'
-    },
-    {
-        id: 'nomex_bag',
-        name: 'Nomex Gear',
-        icon: '🔥',
-        consumptionRate: 0.005, // kg per person per day (wear and tear)
-        elementalComposition: { 'Carbon': 72, 'Hydrogen': 5, 'Nitrogen': 11, 'Oxygen': 12 },
-        durability: 'Very High (Decades). Nomex is an aramid fiber designed for thermal and radiation resistance, making it highly durable.',
-        recyclablePercentage: 0.90,
-        recycledOutput: 'Carbon Fiber Precursor',
-        recyclingProcessId: 'pyrolysis'
-    },
-    {
-        id: 'zotek_foam',
-        name: 'Zotek F30 Foam',
-        icon: '🧱',
-        consumptionRate: 0.002, // kg per person per day (insulation/packing wear)
-        elementalComposition: { 'Carbon': 25, 'Hydrogen': 2, 'Fluorine': 73 },
-        durability: 'Very High (Decades). As a fluoropolymer, Zotek F30 is extremely resistant to UV radiation and chemical degradation.',
-        recyclablePercentage: 0.95,
-        recycledOutput: 'Structural Blocks',
-        recyclingProcessId: 'compression'
-    },
-    {
-        id: 'aluminum_struts',
-        name: 'Aluminum Parts',
-        icon: '🔩',
-        consumptionRate: 0.001, // kg per person per day (breakage/replacement)
-        elementalComposition: { 'Aluminum': 97, 'Magnesium': 1, 'Silicon': 1, 'Other': 1 },
-        durability: 'Effectively Indefinite (Centuries). Metals are highly resistant to the lunar environment. Lifespan is limited by mechanical fatigue, not decay.',
-        recyclablePercentage: 0.99,
-        recycledOutput: 'Metal Ingots',
-        recyclingProcessId: 'smelting'
-    }
-];
-
-const processesData = {
-    extrusion: {
-        name: 'Polymer Extrusion',
-        description: 'A process for recycling pure thermoplastics like nitrile and polyethylene. The material is shredded, melted, and forced through a nozzle to create a uniform filament for 3D printing.',
-        steps: [
-            'Waste material is shredded into small, consistent granules.',
-            'Granules are heated in a sealed extruder barrel, melting the polymer.',
-            'Volatiles and moisture are captured via a filtration system.',
-            'Molten polymer is forced through a die to form a continuous filament.',
-            'Filament is cooled and spooled, ready for use in a 3D printer.'
-        ],
-        inputs: ['Nitrile Gloves', 'Reclosable Bags'],
-        outputs: ['3D Printer Filament', 'Recovered Water']
-    },
-    pyrolysis: {
-        name: 'Pyrolysis',
-        description: 'A thermal decomposition process that breaks down complex organic materials and mixed plastics at high temperatures in the absence of oxygen.',
-        steps: [
-            'Waste material is dried and shredded.',
-            'Shredded material is fed into an oxygen-free reactor and heated to 400-800°C.',
-            'The heat breaks down complex molecules into simpler, valuable outputs.',
-            'Gases (syngas) are separated from liquids (bio-oil/hydrocarbons).',
-            'Solid residue (biochar/metals) is collected from the reactor.'
-        ],
-        inputs: ['Cotton Clothing', 'Drink Pouches', 'Rehydratable Pouches', 'Nomex Gear'],
-        outputs: ['Biochar', 'Water', 'Aluminum', 'Syngas', 'Hydrocarbons']
-    },
-    compression: {
-        name: 'Heat Compression Sintering',
-        description: 'A process for recycling high-performance foams or mixing polymers with regolith to form durable, structural components.',
-        steps: [
-            'Zotek foam waste is shredded or granulated.',
-            'The granules are placed into a mold.',
-            'The material is heated to just below its melting point while being subjected to high pressure.',
-            'The pressure and heat cause the granules to fuse together (sinter) into a solid, dense block.',
-            'The block is cooled and removed from the mold.'
-        ],
-        inputs: ['Zotek F30 Foam', 'Optional: Lunar Regolith'],
-        outputs: ['Structural Blocks', 'Insulation Panels']
-    },
-    smelting: {
-        name: 'Induction Smelting',
-        description: 'A process for melting and purifying metals like aluminum to be recast into new parts or stock material.',
-        steps: [
-            'Scrap aluminum parts are cleaned and broken into smaller pieces.',
-            'The pieces are placed in a crucible within an induction furnace.',
-            'A powerful magnetic field heats the metal rapidly and efficiently, causing it to melt.',
-            'Impurities (slag) float to the top and are skimmed off.',
-            'The purified molten aluminum is poured into molds to create ingots or new components.'
-        ],
-        inputs: ['Aluminum Parts'],
-        outputs: ['Purified Aluminum Ingots']
-    }
-};
-
-
 // --- UI ELEMENTS ---
-const astronautSlider = document.getElementById('astronauts');
-const durationSlider = document.getElementById('duration');
-const astronautValue = document.getElementById('astronauts-value');
+const durationSlider = document.getElementById('missionDuration');
+const investmentSlider = document.getElementById('totalInvestment');
 const durationValue = document.getElementById('duration-value');
+const investmentValue = document.getElementById('investment-value');
 const calculateBtn = document.getElementById('calculate-btn');
-const suppliesGrid = document.getElementById('supplies-grid');
-const totalWasteEl = document.getElementById('total-waste');
-const recyclableMassEl = document.getElementById('recyclable-mass');
-const missionExtensionEl = document.getElementById('mission-extension');
-const processGrid = document.getElementById('process-grid');
-const modal = document.getElementById('modal');
-const modalContent = document.getElementById('modal-content');
-const modalTitle = document.getElementById('modal-title');
-const modalBody = document.getElementById('modal-body');
-const modalClose = document.getElementById('modal-close');
+const dashboard = document.getElementById('impact-dashboard');
+const loadingIndicator = document.getElementById('loading-indicator');
+const materialsData = [ { id: 'gloves' }, { id: 'clothing' }, { id: 'reclosable_bag' }, { id: 'drink_pouch' }, { id: 'rehydratable_pouch' }, { id: 'nomex_bag' }, { id: 'zotek_foam' }, { id: 'aluminum_struts' }];
 
-let wasteChart, recyclingChart, compositionChart;
+let wasteChart, recyclingChart;
 
 // --- FUNCTIONS ---
-
 function updateSliderValues() {
-    astronautValue.textContent = astronautSlider.value;
     durationValue.textContent = durationSlider.value;
+    investmentValue.textContent = `$${investmentSlider.value}M`;
 }
 
-function calculateAndDisplayResults() {
-    const numAstronauts = parseInt(astronautSlider.value);
-    const missionDuration = parseInt(durationSlider.value);
+function getVal(id) {
+    return parseFloat(document.getElementById(id).value) || 0;
+}
 
-    let totalInitialMass = 0;
-    let totalWaste = 0;
-    let totalRecyclableMass = 0;
-    let totalDailyConsumption = 0;
-    
-    const wasteBreakdown = {};
-    const recyclableOutputs = {};
-
-    suppliesGrid.innerHTML = ''; // Clear previous results
-
+// Gathers all user inputs and structures them for the backend
+function packageParametersForBackend() {
+    const parameters = {
+        missionParameters: { durationDays: getVal('missionDuration') },
+        financialParameters: { totalInvestmentUSD: getVal('totalInvestment') * 1_000_000 },
+        initialSuppliesKg: {}
+    };
     materialsData.forEach(material => {
-        const initialQuantity = material.consumptionRate * numAstronauts * missionDuration;
-        const wasteGenerated = initialQuantity; // Assume 100% of consumables become waste
-        const recyclableMass = wasteGenerated * material.recyclablePercentage;
-
-        totalInitialMass += initialQuantity;
-        totalWaste += wasteGenerated;
-        totalRecyclableMass += recyclableMass;
-        totalDailyConsumption += material.consumptionRate;
-
-        wasteBreakdown[material.name] = wasteGenerated;
-        
-        if (recyclableOutputs[material.recycledOutput]) {
-            recyclableOutputs[material.recycledOutput] += recyclableMass;
-        } else {
-            recyclableOutputs[material.recycledOutput] = recyclableMass;
-        }
-
-        // Create and append supply card
-        const card = document.createElement('div');
-        card.className = 'glass-card p-4 flex flex-col items-center text-center space-y-2';
-        card.innerHTML = `
-            <div class="text-4xl">${material.icon}</div>
-            <h3 class="text-lg font-semibold text-white">${material.name}</h3>
-            <p class="text-2xl font-bold text-blue-300">${initialQuantity.toFixed(1)} kg</p>
-            <div class="flex flex-col space-y-2 w-full pt-2">
-                <button class="text-sm py-1 px-2 rounded-md btn-secondary text-white w-full" data-modal="composition" data-id="${material.id}">Composition</button>
-                <button class="text-sm py-1 px-2 rounded-md btn-secondary text-white w-full" data-modal="durability" data-id="${material.id}">Durability</button>
-            </div>
-        `;
-        suppliesGrid.appendChild(card);
+        parameters.initialSuppliesKg[material.id] = getVal(`supply-${material.id}`);
     });
+    return parameters;
+}
 
-    // Update totals
-    totalWasteEl.textContent = `${totalWaste.toFixed(1)} kg`;
-    recyclableMassEl.textContent = `${totalRecyclableMass.toFixed(1)} kg`;
-
-    // Calculate mission extension
-    const savedMass = totalRecyclableMass; // Simplified: assumes 1kg recycled saves 1kg launch mass
-    const dailyConsumptionTotal = totalDailyConsumption * numAstronauts;
-    const extensionDays = savedMass / dailyConsumptionTotal;
-    missionExtensionEl.textContent = `${Math.floor(extensionDays)} Days`;
+// Renders the results received from the backend
+function renderResults(data) {
+    // Update KPI cards
+    document.getElementById('total-waste').textContent = `${data.summary.totalWasteKg.toFixed(1)} kg`;
+    document.getElementById('recyclable-mass').textContent = `${data.summary.totalRecyclableKg.toFixed(1)} kg`;
+    document.getElementById('launches-avoided').textContent = data.summary.launchesAvoided.toFixed(2);
+    document.getElementById('recycled-value').textContent = `$${(data.summary.recycledValueM).toFixed(2)} M`;
+    document.getElementById('payback-period').textContent = isFinite(data.summary.paybackYears) ? data.summary.paybackYears.toFixed(1) : 'N/A';
     
-    // Update charts
-    updateWasteChart(wasteBreakdown);
-    updateRecyclingChart(recyclableOutputs);
+    // Inject Gemini's HTML analysis
+    document.getElementById('gemini-analysis').innerHTML = data.geminiAnalysis;
+
+    // Update charts with data from backend
+    updateChart(wasteChart, 'wasteChart', 'doughnut', data.charts.wasteBreakdown, { position: 'right' });
+    updateChart(recyclingChart, 'recyclingChart', 'bar', data.charts.recyclingOutput, { indexAxis: 'y', legend: { display: false } });
 }
 
-function updateWasteChart(data) {
-    const ctx = document.getElementById('wasteChart').getContext('2d');
-    const labels = Object.keys(data);
-    const values = Object.values(data);
+// Generic function to create or update a Chart.js instance
+function updateChart(chartInstance, canvasId, type, chartData, customOptions = {}) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if (chartInstance) chartInstance.destroy();
+    
+    const chartColors = type === 'doughnut' 
+        ? ['#1d4ed8', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe', '#eff6ff']
+        : '#22c55e';
 
-    if (wasteChart) {
-        wasteChart.destroy();
-    }
-
-    wasteChart = new Chart(ctx, {
-        type: 'doughnut',
+    chartInstance = new Chart(ctx, {
+        type: type,
         data: {
-            labels: labels,
+            labels: chartData.labels,
             datasets: [{
-                label: 'Waste by Type (kg)',
-                data: values,
-                backgroundColor: [
-                    '#1d4ed8', '#2563eb', '#3b82f6', '#60a5fa',
-                    '#93c5fd', '#bfdbfe', '#dbeafe', '#eff6ff'
-                ],
+                label: 'Mass (kg)',
+                data: chartData.data,
+                backgroundColor: chartColors,
                 borderColor: '#0a0f1f',
                 borderWidth: 2
             }]
@@ -436,204 +226,78 @@ function updateWasteChart(data) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    position: 'right',
-                    labels: {
-                        color: '#e0e0e0',
-                        font: { size: 14 }
-                    }
-                }
-            }
-        }
-    });
-}
-
-function updateRecyclingChart(data) {
-    const ctx = document.getElementById('recyclingChart').getContext('2d');
-    const labels = Object.keys(data);
-    const values = Object.values(data);
-
-    if (recyclingChart) {
-        recyclingChart.destroy();
-    }
-
-    recyclingChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Recycled Output (kg)',
-                data: values,
-                backgroundColor: '#22c55e',
-                borderColor: '#16a34a',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
+                legend: { labels: { color: '#e0e0e0', font: { size: 14 } }, ...customOptions.legend },
             },
-            scales: {
-                x: {
-                    ticks: { color: '#9ca3af' },
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                },
-                y: {
-                    ticks: { color: '#e0e0e0' },
-                    grid: { display: false }
-                }
-            }
+            ...customOptions
         }
     });
+    // Re-assign to global variable to allow destruction
+    if (canvasId === 'wasteChart') wasteChart = chartInstance;
+    if (canvasId === 'recyclingChart') recyclingChart = chartInstance;
 }
 
-function openModal(type, id) {
-    const material = materialsData.find(m => m.id === id);
-    if (!material) return;
+// Main function to handle the API call workflow
+async function handleMissionAnalysis() {
+    dashboard.classList.add('hidden');
+    loadingIndicator.classList.add('flex');
+    loadingIndicator.classList.remove('hidden');
 
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    const payload = packageParametersForBackend();
+    
+    try {
+        // This is where you would make the actual call to your backend.
+        // const response = await fetch('/api/analyze-mission', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(payload)
+        // });
+        // if (!response.ok) throw new Error('Network response was not ok.');
+        // const results = await response.json();
 
-    if (type === 'composition') {
-        modalTitle.textContent = `${material.name} - Elemental Composition`;
-        modalBody.innerHTML = `
-            <div class="grid md:grid-cols-2 gap-6 items-center">
-                <div class="h-64"><canvas id="compositionChart"></canvas></div>
-                <ul class="space-y-2 text-lg">
-                    ${Object.entries(material.elementalComposition).map(([el, val]) => `
-                        <li class="flex justify-between">
-                            <span>${el}:</span>
-                            <span class="font-semibold">${val}%</span>
-                        </li>`).join('')}
-                </ul>
-            </div>
-        `;
-        createCompositionChart(material.elementalComposition);
-    } else if (type === 'durability') {
-        modalTitle.textContent = `${material.name} - Lunar Durability`;
-        modalBody.innerHTML = `<p class="text-lg leading-relaxed">${material.durability}</p>`;
+        // --- MOCK BACKEND RESPONSE ---
+        // For demonstration, we'll simulate a 2-second delay and a fake response.
+        // Replace this block with your actual `fetch` call.
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const mockResults = {
+            summary: {
+                totalWasteKg: Object.values(payload.initialSuppliesKg).reduce((a, b) => a + b, 0),
+                totalRecyclableKg: Object.values(payload.initialSuppliesKg).reduce((a, b) => a + b, 0) * 0.9,
+                launchesAvoided: 0.02,
+                recycledValueM: 22.5,
+                paybackYears: 2.8
+            },
+            charts: {
+                wasteBreakdown: { labels: ['Nitrile Gloves', 'Clothing', 'Bags', 'Pouches', 'Advanced Materials'], data: [14.6, 36.5, 14.6, 102.2, 11.7] },
+                recyclingOutput: { labels: ['3D Filament', 'Biochar/Water', 'Aluminum', 'Hydrocarbons', 'Struct. Blocks'], data: [55.0, 32.8, 37.2, 70.0, 10.0] }
+            },
+            geminiAnalysis: `<h3>Mission Viability Assessment</h3><p>Based on the mission parameters, the proposed recycling initiative is <strong>highly viable</strong>. The financial payback period of <strong>2.8 years</strong> is well within the 10-year mission duration, indicating a strong return on investment primarily driven by the high "avoided cost" of launching materials from Earth.</p><h4>Strategic Recommendations:</h4><ul><li><strong>Optimize Filament Production:</strong> The largest recycled output is 3D printer filament. Mission planners should maximize the use of 3D printing for on-demand spares and tools to fully leverage this resource.</li><li><strong>Water Recovery:</strong> The 32.8 kg of water recovered from pyrolyzing cotton is a critical life-support resource. This significantly reduces the required water resupply mass, a factor not fully captured in the financial model.</li></ul>`
+        };
+        // --- END MOCK ---
+        
+        renderResults(mockResults);
+        dashboard.classList.remove('hidden');
+
+    } catch (error) {
+        console.error("Error analyzing mission:", error);
+        alert("An error occurred while contacting the backend. Please check the console for details.");
+    } finally {
+        loadingIndicator.classList.add('hidden');
+        loadingIndicator.classList.remove('flex');
     }
 }
 
-function openProcessModal(id) {
-    const process = processesData[id];
-    if (!process) return;
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    modalTitle.textContent = process.name;
-    modalBody.innerHTML = `
-        <p class="text-lg leading-relaxed mb-6">${process.description}</p>
-        <div class="grid md:grid-cols-2 gap-6">
-            <div>
-                <h4 class="text-xl font-semibold mb-2 text-blue-300">Process Steps:</h4>
-                <ol class="list-decimal list-inside space-y-2">
-                    ${process.steps.map(step => `<li>${step}</li>`).join('')}
-                </ol>
-            </div>
-            <div>
-                <h4 class="text-xl font-semibold mb-2 text-green-300">Inputs:</h4>
-                <ul class="list-disc list-inside space-y-1 mb-4">
-                    ${process.inputs.map(input => `<li>${input}</li>`).join('')}
-                </ul>
-                <h4 class="text-xl font-semibold mb-2 text-yellow-300">Outputs:</h4>
-                <ul class="list-disc list-inside space-y-1">
-                    ${process.outputs.map(output => `<li>${output}</li>`).join('')}
-                </ul>
-            </div>
-        </div>
-    `;
-}
-
-function createCompositionChart(data) {
-    const ctx = document.getElementById('compositionChart').getContext('2d');
-    if (compositionChart) {
-        compositionChart.destroy();
-    }
-    compositionChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: Object.keys(data),
-            datasets: [{
-                data: Object.values(data),
-                backgroundColor: ['#3b82f6', '#ef4444', '#22c55e', '#eab308', '#8b5cf6', '#ec4899'],
-                borderColor: '#0a0f1f',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: { color: '#e0e0e0' }
-                }
-            }
-        }
-    });
-}
-
-function closeModal() {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    modalBody.innerHTML = '';
-}
-
-function populateProcessGuides() {
-    Object.entries(processesData).forEach(([id, process]) => {
-        const card = document.createElement('div');
-        card.className = 'glass-card p-6 flex flex-col justify-between hover:border-blue-400 transition-all cursor-pointer';
-        card.dataset.processId = id;
-        card.innerHTML = `
-            <div>
-                <h3 class="text-2xl font-bold text-white mb-2">${process.name}</h3>
-                <p class="text-gray-300 mb-4">${process.description.substring(0, 100)}...</p>
-            </div>
-            <div class="text-right">
-                <button class="font-semibold text-blue-400">View Details &rarr;</button>
-            </div>
-        `;
-        processGrid.appendChild(card);
-    });
-}
 
 // --- EVENT LISTENERS ---
 document.addEventListener('DOMContentLoaded', () => {
     updateSliderValues();
-    calculateAndDisplayResults();
-    populateProcessGuides();
+    // No initial calculation, waits for user to click the button
 });
 
-astronautSlider.addEventListener('input', updateSliderValues);
-durationSlider.addEventListener('input', updateSliderValues);
-calculateBtn.addEventListener('click', calculateAndDisplayResults);
-
-modalClose.addEventListener('click', closeModal);
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        closeModal();
-    }
+[durationSlider, investmentSlider].forEach(slider => {
+    slider.addEventListener('input', updateSliderValues);
 });
 
-// Event delegation for modal buttons
-document.body.addEventListener('click', (e) => {
-    const modalButton = e.target.closest('[data-modal]');
-    if (modalButton) {
-        const type = modalButton.dataset.modal;
-        const id = modalButton.dataset.id;
-        openModal(type, id);
-    }
-
-    const processCard = e.target.closest('[data-process-id]');
-    if (processCard) {
-        const id = processCard.dataset.processId;
-        openProcessModal(id);
-    }
-});
+calculateBtn.addEventListener('click', handleMissionAnalysis);
 
 </script>
 </body>
