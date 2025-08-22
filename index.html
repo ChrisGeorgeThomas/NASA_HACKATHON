@@ -1,0 +1,304 @@
+DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunar Mission Sustainability Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0f1f;
+            color: #e0e0e0;
+        }
+        .glass-card {
+            background: rgba(20, 28, 58, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+        input[type="number"].supply-input {
+            background-color: rgba(10, 15, 31, 0.8);
+            border: 1px solid #3b82f6;
+            color: #e0e0e0;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        /* NEW: Loading Spinner Style */
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-30 glass-card mx-4 mt-4">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white"><span class="text-blue-400">Lunar</span> Sustainability Planner</h1>
+            <nav class="hidden md:flex space-x-6 text-lg">
+                <a href="#mission-params" class="hover:text-blue-400">Parameters</a>
+                <a href="#supplies" class="hover:text-blue-400">Supplies</a>
+                <a href="#impact-dashboard" class="hover:text-blue-400">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-6">
+        
+        <section id="mission-params" class="py-12">
+             <div class="glass-card p-8 text-center mb-8">
+                <h2 class="text-3xl font-bold mb-4 text-white">Mission & Financial Parameters</h2>
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <label for="missionDuration" class="text-xl font-semibold block">Mission Duration (Days)</label>
+                        <div class="flex items-center justify-center space-x-4">
+                           <input type="range" id="missionDuration" min="30" max="1000" value="365" step="5" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                           <span id="duration-value" class="text-2xl font-bold text-blue-400 w-20 text-center">365</span>
+                       </div>
+                    </div>
+                    <div class="space-y-4">
+                        <label for="totalInvestment" class="text-xl font-semibold block">Total Investment ($M)</label>
+                        <input type="range" id="totalInvestment" min="10" max="500" value="65" step="5" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        <span id="investment-value" class="text-2xl font-bold text-blue-400">$65M</span>
+                    </div>
+                </div>
+            </div>
+
+            <section id="supplies" class="py-12">
+                <h2 class="text-4xl font-bold text-center mb-8">Initial Mission Supplies (kg)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🧤</div><h3 class="text-lg mt-2">Nitrile Gloves</h3><div class="mt-2"><input type="number" id="supply-gloves" value="14.6" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">👕</div><h3 class="text-lg mt-2">Cotton Clothing</h3><div class="mt-2"><input type="number" id="supply-clothing" value="36.5" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🛍️</div><h3 class="text-lg mt-2">Reclosable Bags</h3><div class="mt-2"><input type="number" id="supply-reclosable_bag" value="14.6" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🧃</div><h3 class="text-lg mt-2">Drink Pouches</h3><div class="mt-2"><input type="number" id="supply-drink_pouch" value="43.8" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🍲</div><h3 class="text-lg mt-2">Rehydratable Pouches</h3><div class="mt-2"><input type="number" id="supply-rehydratable_pouch" value="58.4" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🔥</div><h3 class="text-lg mt-2">Nomex Gear</h3><div class="mt-2"><input type="number" id="supply-nomex_bag" value="7.3" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🧱</div><h3 class="text-lg mt-2">Zotek F30 Foam</h3><div class="mt-2"><input type="number" id="supply-zotek_foam" value="2.9" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                    <div class="glass-card p-4 text-center"><div class="text-4xl">🔩</div><h3 class="text-lg mt-2">Aluminum Parts</h3><div class="mt-2"><input type="number" id="supply-aluminum_struts" value="1.5" class="w-full supply-input"><span class="text-sm text-gray-400">kg</span></div></div>
+                </div>
+            </section>
+             <div class="text-center mt-10">
+                <button id="calculate-btn" class="px-8 py-3 btn-primary text-white font-bold rounded-lg text-xl shadow-lg flex items-center justify-center mx-auto">
+                    <span>Analyze Mission with Gemini</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="impact-dashboard" class="py-12 hidden">
+             <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div class="glass-card p-8 h-full">
+                    <h2 class="text-3xl font-bold text-center mb-4">Waste Generation</h2>
+                    <div class="text-center mb-8"><span class="text-xl">Total Waste:</span><span id="total-waste" class="text-3xl font-bold text-blue-400 ml-2"></span></div>
+                    <div class="w-full max-w-2xl mx-auto h-80"><canvas id="wasteChart"></canvas></div>
+                </div>
+                <div class="glass-card p-8 h-full">
+                    <h2 class="text-3xl font-bold text-center mb-4">Recycling Potential</h2>
+                     <div class="text-center mb-8"><span class="text-xl">Total Recyclable Mass:</span><span id="recyclable-mass" class="text-3xl font-bold text-green-400 ml-2"></span></div>
+                    <div class="w-full mx-auto h-80"><canvas id="recyclingChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div class="glass-card p-8 text-center bg-blue-900/50 border-blue-700">
+                    <h3 class="text-3xl font-semibold mb-4">Logistical Impact 🛰️</h3>
+                    <div id="launches-avoided" class="text-6xl font-bold text-green-400 my-4"></div>
+                    <p class="text-lg text-gray-300">resupply missions avoided.</p>
+                </div>
+                <div class="glass-card p-8 text-center bg-indigo-900/50 border-indigo-700">
+                    <h3 class="text-3xl font-semibold mb-4">Financial Impact 💰</h3>
+                    <div id="recycled-value" class="text-6xl font-bold text-green-400 my-4"></div>
+                    <p class="text-lg text-gray-300">Financial payback in <strong id="payback-period" class="text-white"></strong> years.</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-8">
+                <h2 class="text-3xl font-bold mb-4 text-center">Gemini's Analysis & Insights</h2>
+                <div id="gemini-analysis" class="prose prose-invert max-w-none text-lg leading-relaxed">
+                    </div>
+            </div>
+        </section>
+        
+        <div id="loading-indicator" class="hidden justify-center items-center py-12">
+            <div class="loader"></div>
+            <p class="text-2xl ml-4 text-gray-400">Contacting backend and analyzing with Gemini...</p>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-gray-500"><p>Conceptual Tool: Frontend Interface for Gemini-Powered Backend</p></footer>
+
+<script>
+// --- UI ELEMENTS ---
+const durationSlider = document.getElementById('missionDuration');
+const investmentSlider = document.getElementById('totalInvestment');
+const durationValue = document.getElementById('duration-value');
+const investmentValue = document.getElementById('investment-value');
+const calculateBtn = document.getElementById('calculate-btn');
+const dashboard = document.getElementById('impact-dashboard');
+const loadingIndicator = document.getElementById('loading-indicator');
+const materialsData = [ { id: 'gloves' }, { id: 'clothing' }, { id: 'reclosable_bag' }, { id: 'drink_pouch' }, { id: 'rehydratable_pouch' }, { id: 'nomex_bag' }, { id: 'zotek_foam' }, { id: 'aluminum_struts' }];
+
+let wasteChart, recyclingChart;
+
+// --- FUNCTIONS ---
+function updateSliderValues() {
+    durationValue.textContent = durationSlider.value;
+    investmentValue.textContent = `$${investmentSlider.value}M`;
+}
+
+function getVal(id) {
+    return parseFloat(document.getElementById(id).value) || 0;
+}
+
+// Gathers all user inputs and structures them for the backend
+function packageParametersForBackend() {
+    const parameters = {
+        missionParameters: { durationDays: getVal('missionDuration') },
+        financialParameters: { totalInvestmentUSD: getVal('totalInvestment') * 1_000_000 },
+        initialSuppliesKg: {}
+    };
+    materialsData.forEach(material => {
+        parameters.initialSuppliesKg[material.id] = getVal(`supply-${material.id}`);
+    });
+    return parameters;
+}
+
+// Renders the results received from the backend
+function renderResults(data) {
+    // Update KPI cards
+    document.getElementById('total-waste').textContent = `${data.summary.totalWasteKg.toFixed(1)} kg`;
+    document.getElementById('recyclable-mass').textContent = `${data.summary.totalRecyclableKg.toFixed(1)} kg`;
+    document.getElementById('launches-avoided').textContent = data.summary.launchesAvoided.toFixed(2);
+    document.getElementById('recycled-value').textContent = `$${(data.summary.recycledValueM).toFixed(2)} M`;
+    document.getElementById('payback-period').textContent = isFinite(data.summary.paybackYears) ? data.summary.paybackYears.toFixed(1) : 'N/A';
+    
+    // Inject Gemini's HTML analysis
+    document.getElementById('gemini-analysis').innerHTML = data.geminiAnalysis;
+
+    // Update charts with data from backend
+    updateChart(wasteChart, 'wasteChart', 'doughnut', data.charts.wasteBreakdown, { position: 'right' });
+    updateChart(recyclingChart, 'recyclingChart', 'bar', data.charts.recyclingOutput, { indexAxis: 'y', legend: { display: false } });
+}
+
+// Generic function to create or update a Chart.js instance
+function updateChart(chartInstance, canvasId, type, chartData, customOptions = {}) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if (chartInstance) chartInstance.destroy();
+    
+    const chartColors = type === 'doughnut' 
+        ? ['#1d4ed8', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe', '#eff6ff']
+        : '#22c55e';
+
+    chartInstance = new Chart(ctx, {
+        type: type,
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Mass (kg)',
+                data: chartData.data,
+                backgroundColor: chartColors,
+                borderColor: '#0a0f1f',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#e0e0e0', font: { size: 14 } }, ...customOptions.legend },
+            },
+            ...customOptions
+        }
+    });
+    // Re-assign to global variable to allow destruction
+    if (canvasId === 'wasteChart') wasteChart = chartInstance;
+    if (canvasId === 'recyclingChart') recyclingChart = chartInstance;
+}
+
+// Main function to handle the API call workflow
+async function handleMissionAnalysis() {
+    dashboard.classList.add('hidden');
+    loadingIndicator.classList.add('flex');
+    loadingIndicator.classList.remove('hidden');
+
+    const payload = packageParametersForBackend();
+    
+    try {
+        // This is where you would make the actual call to your backend.
+        // const response = await fetch('/api/analyze-mission', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(payload)
+        // });
+        // if (!response.ok) throw new Error('Network response was not ok.');
+        // const results = await response.json();
+
+        // --- MOCK BACKEND RESPONSE ---
+        // For demonstration, we'll simulate a 2-second delay and a fake response.
+        // Replace this block with your actual `fetch` call.
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const mockResults = {
+            summary: {
+                totalWasteKg: Object.values(payload.initialSuppliesKg).reduce((a, b) => a + b, 0),
+                totalRecyclableKg: Object.values(payload.initialSuppliesKg).reduce((a, b) => a + b, 0) * 0.9,
+                launchesAvoided: 0.02,
+                recycledValueM: 22.5,
+                paybackYears: 2.8
+            },
+            charts: {
+                wasteBreakdown: { labels: ['Nitrile Gloves', 'Clothing', 'Bags', 'Pouches', 'Advanced Materials'], data: [14.6, 36.5, 14.6, 102.2, 11.7] },
+                recyclingOutput: { labels: ['3D Filament', 'Biochar/Water', 'Aluminum', 'Hydrocarbons', 'Struct. Blocks'], data: [55.0, 32.8, 37.2, 70.0, 10.0] }
+            },
+            geminiAnalysis: `<h3>Mission Viability Assessment</h3><p>Based on the mission parameters, the proposed recycling initiative is <strong>highly viable</strong>. The financial payback period of <strong>2.8 years</strong> is well within the 10-year mission duration, indicating a strong return on investment primarily driven by the high "avoided cost" of launching materials from Earth.</p><h4>Strategic Recommendations:</h4><ul><li><strong>Optimize Filament Production:</strong> The largest recycled output is 3D printer filament. Mission planners should maximize the use of 3D printing for on-demand spares and tools to fully leverage this resource.</li><li><strong>Water Recovery:</strong> The 32.8 kg of water recovered from pyrolyzing cotton is a critical life-support resource. This significantly reduces the required water resupply mass, a factor not fully captured in the financial model.</li></ul>`
+        };
+        // --- END MOCK ---
+        
+        renderResults(mockResults);
+        dashboard.classList.remove('hidden');
+
+    } catch (error) {
+        console.error("Error analyzing mission:", error);
+        alert("An error occurred while contacting the backend. Please check the console for details.");
+    } finally {
+        loadingIndicator.classList.add('hidden');
+        loadingIndicator.classList.remove('flex');
+    }
+}
+
+
+// --- EVENT LISTENERS ---
+document.addEventListener('DOMContentLoaded', () => {
+    updateSliderValues();
+    // No initial calculation, waits for user to click the button
+});
+
+[durationSlider, investmentSlider].forEach(slider => {
+    slider.addEventListener('input', updateSliderValues);
+});
+
+calculateBtn.addEventListener('click', handleMissionAnalysis);
+
+</script>
+</body>
+</html>
